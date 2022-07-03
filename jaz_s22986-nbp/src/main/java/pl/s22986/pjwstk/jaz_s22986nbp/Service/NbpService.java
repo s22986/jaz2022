@@ -22,6 +22,14 @@ public class NbpService {
         this.nbpRepository = nbpRepository;
     }
 
+    /**
+     * Funkcja komunikuje sie z api i liczy srednia cene dla zlota dla danej waluty
+     * @param waluta - waluta w formacie trzyliterowym
+     * @param startDate - od kiedy ma pobrac dane
+     * @param endDate - do kiedy ma pobrac dane
+     * @return - zwraca stringa z danymi z klady NbpEntity
+     * @throws JsonProcessingException
+     */
     public String obliczZloto(String waluta, String startDate, String endDate) throws JsonProcessingException {
         XmlMapper xmlMapper = new XmlMapper();
         NbpEntity nbpEntity = new NbpEntity();
@@ -51,11 +59,16 @@ public class NbpService {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd  HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
-        nbpEntity = new NbpEntity(waluta, startDate, endDate, srCenaZlota, String.valueOf(now));
+        nbpEntity = new NbpEntity(waluta, startDate, endDate, srCenaZlota, dtf.format(now));
 
         return nbpRepository.save(nbpEntity).toString();
     }
 
+    /**
+     * Fukcja pobiera z bazy informacje i zwraca je w postaci stringa
+     * @param id - id elementu w bazie
+     * @return - zwraca stringa z danymi z klady NbpEntity
+     */
     public String getID(long id) {
         return nbpRepository.findById(id).get().toString();
     }
